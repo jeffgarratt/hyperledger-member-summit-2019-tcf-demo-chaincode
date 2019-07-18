@@ -1,0 +1,58 @@
+syntax = "proto3";
+/*
+Copyright IBM Corp. All Rights Reserved.
+
+SPDX-License-Identifier: Apache-2.0
+*/
+
+
+
+package main;
+
+message AppBundle {
+    bytes owner = 1;
+    string descriptor_id = 2;
+    repeated bytes artifacts = 3;
+    repeated bytes chaincode_deployment_specs = 4;
+    // The endorsements of the above deployment spec, the owner's signature over
+    // artifacts[] + chaincode_deployment_spec[] + Endorsement.endorser.
+    repeated bytes owner_endorsements = 5;
+}
+
+message AppBundleKeySet {
+    string descriptor_id = 1;
+    repeated string bundle_keys = 2;
+}
+
+
+message AppDescriptor {
+    bytes owner = 1;
+    string description = 2;
+    string bundle_id = 3;
+}
+
+message AppDescriptors {
+    map<string,AppDescriptor> descriptors = 3;
+}
+
+message Query {
+    enum ObjectType {
+        APP_DESCRIPTOR = 0;
+        APP_BUNDLE = 1;
+    }
+    ObjectType object_type = 1;
+    repeated string key_parts = 2;
+    uint32 offset = 3;
+    bool return_values = 4;
+    uint32 max_count = 5;
+}
+
+message QueryResult {
+    Query query = 1;
+    bool has_more = 2;
+    map<string,bytes> results = 3;
+}
+
+
+
+
